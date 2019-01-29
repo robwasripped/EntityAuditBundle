@@ -219,7 +219,7 @@ class AuditReader
      */
     public function find($className, $id, $revision, array $options = array())
     {
-        $options = array_merge(array('threatDeletionsAsExceptions' => false), $options);
+        $options = array_merge(array('threatDeletionsAsExceptions' => false, 'findExactRevision' => false), $options);
 
         if (!$this->metadataFactory->isAudited($className)) {
             throw new NotAuditedException($className);
@@ -229,7 +229,11 @@ class AuditReader
         $class = $this->em->getClassMetadata($className);
         $tableName = $this->config->getTableName($class);
 
-        $whereSQL  = "e." . $this->config->getRevisionFieldName() ." <= ?";
+        $whereSQL = sprintf(
+            "e.%s %s ?",
+            $this->config->getRevisionFieldName(),
+            $options['findExactRevision'] ? '=' : '<='
+        );
 
         foreach ($class->identifier AS $idField) {
             if (is_array($id) && count($id) > 0) {
