@@ -39,6 +39,16 @@
             <tag name="doctrine.event_subscriber" connection="default" />
         </service>
 
+        <service id="simplethings_entityaudit.cache_listener" class="SimpleThings\EntityAudit\EventListener\CacheListener">
+            <argument id="simplethings_entityaudit.reader" type="service" />
+        </service>
+
+        <service id="simplething_entityaudit.register_cache_listener_subscriber" class="SimpleThings\EntityAudit\EventListener\RegisterCacheListenerSubscriber">
+            <argument id="doctrine.orm.default_entity_manager" type="service" />
+            <argument id="simplethings_entityaudit.cache_listener" type="service" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
         <service id="simplethings_entityaudit.username_callable.token_storage" class="SimpleThings\EntityAudit\User\TokenStorageUsernameCallable">
             <argument id="service_container" type="service" />
         </service>
