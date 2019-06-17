@@ -18,6 +18,7 @@
     <services>
         <service id="simplethings_entityaudit.manager" class="SimpleThings\EntityAudit\AuditManager" public="true">
             <argument id="simplethings_entityaudit.config" type="service" />
+            <argument id="SimpleThings\EntityAudit\EntityCache" type="service" />
         </service>
 
         <service id="SimpleThings\EntityAudit\AuditManager" alias="simplethings_entityaudit.manager" public="true" />
@@ -28,6 +29,8 @@
         </service>
 
         <service id="SimpleThings\EntityAudit\AuditReader" alias="simplethings_entityaudit.reader" />
+
+        <service id="SimpleThings\EntityAudit\EntityCache" class="SimpleThings\EntityAudit\EntityCache" public="true" />
 
         <service id="simplethings_entityaudit.log_revisions_listener" class="SimpleThings\EntityAudit\EventListener\LogRevisionsListener">
             <argument id="simplethings_entityaudit.manager" type="service" />
@@ -40,13 +43,7 @@
         </service>
 
         <service id="simplethings_entityaudit.cache_listener" class="SimpleThings\EntityAudit\EventListener\CacheListener">
-            <argument id="simplethings_entityaudit.reader" type="service" />
-        </service>
-
-        <service id="simplething_entityaudit.register_cache_listener_subscriber" class="SimpleThings\EntityAudit\EventListener\RegisterCacheListenerSubscriber">
-            <argument id="doctrine.orm.default_entity_manager" type="service" />
-            <argument id="simplethings_entityaudit.cache_listener" type="service" />
-            <tag name="kernel.event_subscriber" />
+            <argument id="SimpleThings\EntityAudit\EntityCache" type="service" />
         </service>
 
         <service id="simplethings_entityaudit.username_callable.token_storage" class="SimpleThings\EntityAudit\User\TokenStorageUsernameCallable">

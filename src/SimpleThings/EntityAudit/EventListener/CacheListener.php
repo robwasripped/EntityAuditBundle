@@ -6,15 +6,15 @@ namespace SimpleThings\EntityAudit\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
-use SimpleThings\EntityAudit\AuditReader;
+use SimpleThings\EntityAudit\EntityCache;
 
 class CacheListener implements EventSubscriber
 {
-    private $auditReader;
+    private $entityCache;
 
-    public function __construct(AuditReader $auditReader)
+    public function __construct(EntityCache $entityCache)
     {
-        $this->auditReader = $auditReader;
+        $this->entityCache = $entityCache;
     }
 
     public function getSubscribedEvents(): array
@@ -26,6 +26,6 @@ class CacheListener implements EventSubscriber
 
     public function onClear(): void
     {
-        $this->auditReader->clearEntityCache();
+        $this->entityCache->clear();
     }
 }
